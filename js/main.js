@@ -89,9 +89,25 @@ const renderMovies = (Data) => {
 
 const moviesApi =
   "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=";
-const fetchMovies = async () => {
-  const moviesResponse = await fetch(`${moviesApi}10`);
+const fetchMovies = async (APILink) => {
+  const moviesResponse = await fetch(`${APILink}random`);
   const Data = await moviesResponse.json();
   renderMovies(Data);
 };
-fetchMovies();
+fetchMovies(moviesApi);
+const searchForm = document.getElementById("searchForm");
+const searchInput = document.getElementById("searchInput");
+
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  moviesContainer.textContent = "";
+  const searchMoviesApi = moviesApi + searchInput.value;
+
+  const fetchSearchMovies = async () => {
+    const searchMoviesResponse = await fetch(searchMoviesApi);
+    const data = await searchMoviesResponse.json();
+    renderMovies(data);
+    searchInput.value = "";
+  };
+  fetchSearchMovies();
+});
