@@ -39,3 +39,59 @@ const fetchBooks = async () => {
   renderBooks(data);
 };
 fetchBooks();
+const innerRenderForMovies = (Imgpath, title, average, release) => {
+  const moviesContainer = document.getElementById("moviesContainer");
+  moviesContainer.innerHTML += `<div
+          class="md:w-[330px] w-full flex items-start justify-between gap-10 flex-col"
+        >
+          <div class="w-full">
+            <img
+              src=${Imgpath}
+              alt=""
+              class="md:w-full w-[300px]"
+            />
+          </div>
+          <div class="flex justify-center flex-col w-full items-center">
+            <p class="pt-5 font-semibold text-lg text-center">
+              ${title === "10" ? "random" : title}
+            </p>
+            <p
+              class="mt-5 mt- text-center pt-5 font-semibold text-lg text-gray-800 mb-5"
+            >
+              ${average}
+            </p>
+             <p
+              class="mt-5 mt- text-center pt-5 font-semibold text-lg text-gray-800 mb-5"
+            >
+              ${release}
+            </p>
+            
+            >
+          </div>
+        </div>`;
+};
+
+const renderMovies = (Data) => {
+  Data.results.slice(0, 11).forEach((element) => {
+    const title = element.title;
+    const average = element.vote_average;
+    const release = element.release_date;
+    const preImgPath = "https://image.tmdb.org/t/p/w1280";
+    if (element.poster_path == null) {
+      const Imgpath = "movie-poster-template.jpg";
+      innerRenderForMovies(Imgpath, title, average, release);
+    } else {
+      let newImg = preImgPath + element.poster_path;
+      innerRenderForMovies(newImg, title, average, release);
+    }
+  });
+};
+
+const moviesApi =
+  "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=";
+const fetchMovies = async () => {
+  const moviesResponse = await fetch(`${moviesApi}10`);
+  const Data = await moviesResponse.json();
+  renderMovies(Data);
+};
+fetchMovies();
